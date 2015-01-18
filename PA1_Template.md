@@ -21,7 +21,7 @@ Now, lets see the total number of steps taken each day so we need to aggregate d
 stepsxday <- aggregate(steps ~ date, data, sum)
 ```
 
-Then print an histogram of the total number of steps taken each day:
+Then print a histogram of the total number of steps taken each day:
 
 ```r
 hist(stepsxday$steps)
@@ -29,7 +29,7 @@ hist(stepsxday$steps)
 
 ![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4.png) 
 
-Let's see how about **mean** and **median** of total numbers of steps taken per day:
+Let's see what happens with the **mean** and **median** of total numbers of steps taken per day:
 
 
 ```r
@@ -95,14 +95,14 @@ Let's take a look on missing values:
 mv <- sum(is.na(rawdata$steps))
 ```
 
-There're 2304 missing values. Let's replace this missing values with the mean of each interval (stored in *stepsxinterval*).
+There are 2304 missing values. Let's replace these missing values with the mean of each interval (stored in *stepsxinterval*).
 
 
 ```r
 data2 <- rawdata
 # loop through rawdata
 for (i in 1:nrow(rawdata)) {
-    # if is a missing value
+    # if it's a missing value
     if(is.na(rawdata$steps[i])) {
         # replace it with the mean of this interval
         data2$steps[i] <- subset(stepsxinterval, interval == rawdata$interval[i])$steps
@@ -110,7 +110,7 @@ for (i in 1:nrow(rawdata)) {
 }
 ```
 
-Let's see an historgram of that new data:
+Let's see a historgram of that new data:
 
 ```r
 stepsxday2 <- aggregate(steps ~ date, data2, sum)
@@ -136,7 +136,33 @@ median(stepsxday2$steps)
 ```
 
 ## Are there differences in activity patterns between weekdays and weekends?
+Let's prepare the data adding information about weekdays and weekends:
 
+```r
+# set locale time to english language
+Sys.setlocale("LC_TIME", "English")
+```
+
+```
+## [1] "English_United States.1252"
+```
+
+```r
+# adding daytype variable with "weekend" or "weekday" values
+data2$daytype <- as.factor(ifelse(weekdays(as.Date(data2$date)) %in% c("Saturday","Sunday"), "weekend", "weekday"))
+```
+
+Now, let's see how the data looks:
+
+```r
+par(mfrow = c(2,1))
+sxi.weekend <- aggregate(steps ~ interval, data2, subset = data2$daytype == "weekend", mean)
+sxi.weekday <- aggregate(steps ~ interval, data2, subset = data2$daytype == "weekday", mean)
+plot(sxi.weekend, type = "l")
+plot(sxi.weekday, type = "l")
+```
+
+![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14.png) 
 ## BONUS: what is mean total number of steps taken per day (taking NA as 0)?
 
 I reproduce the first question changig NA values as 0. This is done because of some confussing posts in the forum.
@@ -149,7 +175,7 @@ stepsxday3 <- aggregate(steps ~ date, data3, sum)
 hist(stepsxday3$steps)
 ```
 
-![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13.png) 
+![plot of chunk unnamed-chunk-15](figure/unnamed-chunk-15.png) 
 
 ```r
 mean(stepsxday3$steps)
