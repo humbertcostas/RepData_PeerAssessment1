@@ -31,7 +31,6 @@ median(stepsxday$steps)
 ```
 
 ## What is the average daily activity pattern?
-
 First of all, we're going to aggregate data by steps and interval:
 
 ```{r}
@@ -44,18 +43,46 @@ Let's see if there's a pattern with a time series plot:
 plot(stepsxinterval, type = "l")
 ```
 
-As you can see, there is a 5-minute interval with maximum value, which is:
+The maximum steps are reached at 8:35 AM:
 
 ```{r}
 maxval <- subset(stepsxinterval, steps == max(stepsxinterval$steps))
 maxval$interval
 ```
 
-It seems that at 8:35am is when it reach the maximum steps.
+And the average steps are:
+
+```{r}
+max(stepsxinterval$steps)
+```
 
 ## Imputing missing values
+Let's take a look on missing values:
+```{r}
+mv <- sum(is.na(rawdata$steps))
+```
 
+There're `r mv` missing values. Let's replace this missing values with the mean of each interval (stored in *stepsxinterval*).
 
+```{r}
+data2 <- rawdata
+# loop through rawdata
+for (i in 1:nrow(rawdata)) {
+    # if is a missing value
+    if(is.na(rawdata$steps[i])) {
+        # replace it with the mean of this interval
+        data2$steps[i] <- subset(stepsxinterval, interval == rawdata$interval[i])$steps
+    }
+}
+```
+
+Let's see an historgram of that new data:
+```{r}
+stepsxday2 <- aggregate(steps ~ date, data2, sum)
+hist(stepsxday2$steps)
+mean(stepsxday2$steps)
+median(stepsxday2$steps)
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -64,10 +91,10 @@ It seems that at 8:35am is when it reach the maximum steps.
 I reproduce the first question changig NA values as 0. This is done because of some confussing posts in the forum.
 
 ```{r}
-data2 <- rawdata
-data2[is.na(data2)] <- 0
-stepsxday2 <- aggregate(steps ~ date, data2, sum)
-hist(stepsxday2$steps)
-mean(stepsxday2$steps)
-median(stepsxday2$steps)
+data3 <- rawdata
+data3[is.na(data3)] <- 0
+stepsxday3 <- aggregate(steps ~ date, data3, sum)
+hist(stepsxday3$steps)
+mean(stepsxday3$steps)
+median(stepsxday3$steps)
 ```

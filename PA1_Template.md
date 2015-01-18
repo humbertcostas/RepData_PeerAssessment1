@@ -49,7 +49,6 @@ median(stepsxday$steps)
 ```
 
 ## What is the average daily activity pattern?
-
 First of all, we're going to aggregate data by steps and interval:
 
 
@@ -66,7 +65,7 @@ plot(stepsxinterval, type = "l")
 
 ![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7.png) 
 
-As you can see, there is a 5-minute interval with maximum value, which is:
+The maximum steps are reached at 8:35 AM:
 
 
 ```r
@@ -78,9 +77,63 @@ maxval$interval
 ## [1] 835
 ```
 
+And the average steps are:
+
+
+```r
+max(stepsxinterval$steps)
+```
+
+```
+## [1] 206.2
+```
+
 ## Imputing missing values
+Let's take a look on missing values:
+
+```r
+mv <- sum(is.na(rawdata$steps))
+```
+
+There're 2304 missing values. Let's replace this missing values with the mean of each interval (stored in *stepsxinterval*).
 
 
+```r
+data2 <- rawdata
+# loop through rawdata
+for (i in 1:nrow(rawdata)) {
+    # if is a missing value
+    if(is.na(rawdata$steps[i])) {
+        # replace it with the mean of this interval
+        data2$steps[i] <- subset(stepsxinterval, interval == rawdata$interval[i])$steps
+    }
+}
+```
+
+Let's see an historgram of that new data:
+
+```r
+stepsxday2 <- aggregate(steps ~ date, data2, sum)
+hist(stepsxday2$steps)
+```
+
+![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12.png) 
+
+```r
+mean(stepsxday2$steps)
+```
+
+```
+## [1] 10766
+```
+
+```r
+median(stepsxday2$steps)
+```
+
+```
+## [1] 10766
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -90,16 +143,16 @@ I reproduce the first question changig NA values as 0. This is done because of s
 
 
 ```r
-data2 <- rawdata
-data2[is.na(data2)] <- 0
-stepsxday2 <- aggregate(steps ~ date, data2, sum)
-hist(stepsxday2$steps)
+data3 <- rawdata
+data3[is.na(data3)] <- 0
+stepsxday3 <- aggregate(steps ~ date, data3, sum)
+hist(stepsxday3$steps)
 ```
 
-![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9.png) 
+![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13.png) 
 
 ```r
-mean(stepsxday2$steps)
+mean(stepsxday3$steps)
 ```
 
 ```
@@ -107,7 +160,7 @@ mean(stepsxday2$steps)
 ```
 
 ```r
-median(stepsxday2$steps)
+median(stepsxday3$steps)
 ```
 
 ```
