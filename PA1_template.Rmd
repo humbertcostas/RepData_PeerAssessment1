@@ -18,27 +18,56 @@ Now, lets see the total number of steps taken each day so we need to aggregate d
 stepsxday <- aggregate(steps ~ date, data, sum)
 ```
 
-Then print an histogram:
+Then print an histogram of the total number of steps taken each day:
 ```{r}
-barplot(stepsxday$steps, names.arg=stepsxday$date)
+hist(stepsxday$steps)
 ```
 
-Lets see how about **mean** and **median** of total numbers of steps taken per day:
+Let's see how about **mean** and **median** of total numbers of steps taken per day:
 
 ```{r}
-data2 <- rawdata
-data2[is.na(data2)] <- 0
-stepsxday2 <- aggregate(steps ~ date, data2, sum)
-meansteps2 <- aggregate(data2$steps, list(data2$date), mean)
-mediansteps2 <- aggregate(data2$steps, list(data2$date), median)
+mean(stepsxday$steps)
+median(stepsxday$steps)
 ```
 
 ## What is the average daily activity pattern?
 
+First of all, we're going to aggregate data by steps and interval:
 
+```{r}
+stepsxinterval <- aggregate(steps ~ interval, data, mean)
+```
+
+Let's see if there's a pattern with a time series plot:
+
+```{r}
+plot(stepsxinterval, type = "l")
+```
+
+As you can see, there is a 5-minute interval with maximum value, which is:
+
+```{r}
+maxval <- subset(stepsxinterval, steps == max(stepsxinterval$steps))
+maxval$interval
+```
+
+It seems that at 8:35am is when it reach the maximum steps.
 
 ## Imputing missing values
 
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+## BONUS: what is mean total number of steps taken per day (taking NA as 0)?
+
+I reproduce the first question changig NA values as 0. This is done because of some confussing posts in the forum.
+
+```{r}
+data2 <- rawdata
+data2[is.na(data2)] <- 0
+stepsxday2 <- aggregate(steps ~ date, data2, sum)
+hist(stepsxday2$steps)
+mean(stepsxday2$steps)
+median(stepsxday2$steps)
+```
