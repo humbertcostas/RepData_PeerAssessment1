@@ -24,7 +24,7 @@ stepsxday <- aggregate(steps ~ date, data, sum)
 Then print a histogram of the total number of steps taken each day:
 
 ```r
-hist(stepsxday$steps)
+hist(stepsxday$steps, main = "Histogram of steps by day", xlab = "steps x day")
 ```
 
 ![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4.png) 
@@ -114,7 +114,7 @@ Let's see a historgram of that new data:
 
 ```r
 stepsxday2 <- aggregate(steps ~ date, data2, sum)
-hist(stepsxday2$steps)
+hist(stepsxday2$steps, main = "Histogram of steps by day", xlab = "steps x day")
 ```
 
 ![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12.png) 
@@ -158,8 +158,8 @@ Now, let's see how the data looks:
 par(mfrow = c(2,1))
 sxi.weekend <- aggregate(steps ~ interval, data2, subset = data2$daytype == "weekend", mean)
 sxi.weekday <- aggregate(steps ~ interval, data2, subset = data2$daytype == "weekday", mean)
-plot(sxi.weekend, type = "l")
-plot(sxi.weekday, type = "l")
+plot(sxi.weekend, type = "l", main = "weekend")
+plot(sxi.weekday, type = "l", main = "weekday")
 ```
 
 ![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14.png) 
@@ -172,7 +172,7 @@ I reproduce the first question changig NA values as 0. This is done because of s
 data3 <- rawdata
 data3[is.na(data3)] <- 0
 stepsxday3 <- aggregate(steps ~ date, data3, sum)
-hist(stepsxday3$steps)
+hist(stepsxday3$steps, main = "Histogram of steps by day", xlab = "steps x day")
 ```
 
 ![plot of chunk unnamed-chunk-15](figure/unnamed-chunk-15.png) 
