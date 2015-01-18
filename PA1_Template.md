@@ -3,35 +3,35 @@ Reproducible Research: Peer Assessment 1
   
 ## Loading and preprocessing the data
 We're going to load the data and store it in *rawdata* data.frame:
-```{r}
+
+```r
 rawdata <- read.csv(unzip("activity.zip"))
 ```
 
 ## What is mean total number of steps taken per day?
 For this question we're going to ignore the missing values in the dataset:
-```{r}
+
+```r
 data <- na.omit(rawdata)
 ```
 
 Now, lets see the total number of steps taken each day so we need to aggregate data:
-```{r}
+
+```r
 stepsxday <- aggregate(steps ~ date, data, sum)
 ```
 
 Then print an histogram:
-```{r}
+
+```r
 barplot(stepsxday$steps, names.arg=stepsxday$date)
 ```
 
-Lets see how about **mean** and **median** of total numbers of steps taken per day:
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4.png) 
 
-```{r}
-data2 <- rawdata
-data2[is.na(data2)] <- 0
-stepsxday2 <- aggregate(steps ~ date, data2, sum)
-meansteps2 <- aggregate(data2$steps, list(data2$date), mean)
-mediansteps2 <- aggregate(data2$steps, list(data2$date), median)
-```
+Lets see how about **mean** and **median** total numbers of steps taken per day:
+
+
 
 ## What is the average daily activity pattern?
 
