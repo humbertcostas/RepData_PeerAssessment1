@@ -163,6 +163,11 @@ plot(sxi.weekday, type = "l", main = "weekday")
 ```
 
 ![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14.png) 
+
+Based on the *plot* we can observe two clear differences:
+- On weekend the activity starts later than on weekdays.
+- During the day we can observe more activity on weekends than on weekdays.
+
 ## BONUS: what is mean total number of steps taken per day (taking NA as 0)?
 
 I reproduce the first question changig NA values as 0. This is done because of some confussing posts in the forum.
